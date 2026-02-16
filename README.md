@@ -1,2 +1,555 @@
-# Lms.inggris
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LMS Inggris · Learn & Quiz</title>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+        }
+        body {
+            background: linear-gradient(145deg, #f0f4fa 0%, #d9e3ed 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+        }
+        .app-wrapper {
+            max-width: 1300px;
+            width: 100%;
+            background: rgba(255,255,255,0.4);
+            backdrop-filter: blur(10px);
+            border-radius: 42px;
+            box-shadow: 0 20px 40px rgba(0,20,50,0.2);
+            padding: 24px;
+        }
+
+        /* top bar branding */
+        .brand-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            padding: 0 8px;
+        }
+        .logo h2 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1e2f4b, #2c3e6e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+        .logo span {
+            background: #203a5c;
+            color: white;
+            font-size: 0.9rem;
+            padding: 4px 12px;
+            border-radius: 40px;
+            margin-left: 12px;
+            font-weight: 400;
+            -webkit-text-fill-color: white;
+        }
+        .session-indicator {
+            background: white;
+            padding: 8px 20px;
+            border-radius: 100px;
+            font-weight: 500;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.02);
+            font-size: 0.95rem;
+        }
+        .session-indicator i {
+            margin-right: 8px;
+            color: #2c3e6e;
+        }
+        #displayUserType {
+            font-weight: 600;
+            color: #1f3a5f;
+        }
+
+        /* main card */
+        .main-panel {
+            background: white;
+            border-radius: 36px;
+            padding: 28px 24px;
+            box-shadow: inset 0 2px 8px rgba(255,255,255,0.8), 0 18px 28px -8px rgba(0,35,70,0.3);
+        }
+
+        /* login selection grid */
+        .login-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+        .login-card {
+            flex: 1 1 200px;
+            background: #f5f9ff;
+            border-radius: 28px;
+            padding: 24px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+            box-shadow: 0 6px 14px rgba(0,20,40,0.08);
+        }
+        .login-card.active {
+            border-color: #1f3a5f;
+            background: #eaf1fd;
+            transform: scale(1.01);
+            box-shadow: 0 14px 22px -8px #1f3a5f40;
+        }
+        .login-card i {
+            font-size: 2.6rem;
+            background: #1f3a5f;
+            color: white;
+            padding: 16px;
+            border-radius: 60px;
+            margin-bottom: 16px;
+        }
+        .login-card h3 {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: #1a2e4a;
+        }
+        .login-card p {
+            color: #4a5f7a;
+        }
+
+        /* form + logout */
+        .action-area {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        .cred-form {
+            background: #f8fafd;
+            border-radius: 28px;
+            padding: 24px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            gap: 18px;
+            border: 1px solid white;
+        }
+        .input-group {
+            flex: 2 1 240px;
+        }
+        .input-group label {
+            display: block;
+            font-weight: 500;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #2f4567;
+            margin-bottom: 6px;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 16px 20px;
+            border: none;
+            border-radius: 40px;
+            background: white;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.02), inset 0 1px 4px #cad5e2;
+            font-size: 1rem;
+            transition: 0.2s;
+        }
+        .input-group input:focus {
+            outline: 2px solid #1f3a5f;
+            background: #ffffff;
+        }
+        .btn {
+            background: #1f3a5f;
+            border: none;
+            color: white;
+            padding: 16px 32px;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            box-shadow: 0 12px 18px -8px #0f1e30;
+            transition: 0.15s;
+            border: 1px solid #ffffff70;
+        }
+        .btn-secondary {
+            background: #d4e0f0;
+            color: #1f3a5f;
+            box-shadow: none;
+        }
+        .btn:hover {
+            background: #10243f;
+            transform: scale(1.02);
+        }
+        .btn-secondary:hover {
+            background: #bcccff;
+        }
+
+        /* dashboard panels */
+        .dashboard {
+            margin-top: 32px;
+            border-top: 2px dashed #bacfe6;
+            padding-top: 24px;
+        }
+        .hidden {
+            display: none !important;
+        }
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #10243f;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .learning-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
+            margin-bottom: 36px;
+        }
+        .lesson-card {
+            background: #edf4fe;
+            padding: 26px 18px;
+            border-radius: 28px;
+            transition: 0.2s;
+            border: 1px solid white;
+        }
+        .lesson-card:hover {
+            background: #e2edff;
+        }
+        .lesson-icon {
+            font-size: 2.2rem;
+            background: #1f3a5f;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .lesson-card h4 {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+        .lesson-card p {
+            color: #2a3f5e;
+        }
+
+        .quiz-section {
+            background: #e9f0fa;
+            border-radius: 30px;
+            padding: 24px;
+        }
+        .quiz-question {
+            background: white;
+            padding: 24px;
+            border-radius: 24px;
+            box-shadow: 0 6px 14px #cdd9eb;
+        }
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin: 20px 0 16px;
+        }
+        .option-btn {
+            background: #f2f6fd;
+            border: 2px solid #b3c6e0;
+            padding: 14px 28px;
+            border-radius: 60px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.1s;
+            flex: 1 0 160px;
+        }
+        .option-btn.selected {
+            background: #1f3a5f;
+            border-color: #1f3a5f;
+            color: white;
+        }
+        .quiz-feedback {
+            margin-top: 20px;
+            font-weight: 600;
+        }
+        .correct-feedback { color: #1b7b3e; }
+        .wrong-feedback { color: #b13e3e; }
+
+        /* admin specific */
+        .admin-stats {
+            background: #1f2e46;
+            color: white;
+            padding: 18px 24px;
+            border-radius: 28px;
+            margin-bottom: 24px;
+        }
+        .admin-stats span {
+            font-size: 1.2rem;
+            font-weight: 600;
+            background: #ffffff20;
+            padding: 8px 18px;
+            border-radius: 40px;
+        }
+
+        /* responsive */
+        @media (max-width: 600px) {
+            .login-card h3 { font-size: 1.3rem; }
+            .cred-form { flex-direction: column; align-items: stretch; }
+        }
+    </style>
+</head>
+<body>
+<div class="app-wrapper">
+    <div class="brand-bar">
+        <div class="logo">
+            <h2>📘 LingoLearn <span>Inggris</span></h2>
+        </div>
+        <div class="session-indicator" id="sessionBox">
+            <i class="fas fa-user-circle"></i> <span id="displayUserType">Belum login</span>
+        </div>
+    </div>
+
+    <div class="main-panel">
+        <!-- login selection cards -->
+        <div class="login-row" id="loginSelector">
+            <div class="login-card" data-role="admin" id="cardAdmin">
+                <i class="fas fa-user-tie"></i>
+                <h3>Admin</h3>
+                <p>Kelola materi & pantau siswa</p>
+            </div>
+            <div class="login-card" data-role="siswa" id="cardSiswa">
+                <i class="fas fa-user-graduate"></i>
+                <h3>Siswa</h3>
+                <p>Akses pembelajaran & kuis</p>
+            </div>
+        </div>
+
+        <!-- login form + logout -->
+        <div class="action-area">
+            <div class="cred-form" id="loginFormContainer">
+                <div class="input-group">
+                    <label for="usernameInput"><i class="far fa-user"></i> Username</label>
+                    <input type="text" id="usernameInput" placeholder="ketik username..." value="admin">
+                </div>
+                <div class="input-group">
+                    <label for="passwordInput"><i class="fas fa-lock"></i> Password</label>
+                    <input type="password" id="passwordInput" placeholder="••••••••" value="admin123">
+                </div>
+                <button class="btn" id="loginBtn"><i class="fas fa-sign-in-alt"></i> Login sekarang</button>
+                <button class="btn btn-secondary" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </div>
+        </div>
+
+        <!-- DASHBOARDS: Admin -->
+        <div id="adminDashboard" class="dashboard hidden">
+            <div class="section-title"><i class="fas fa-chalkboard-teacher"></i> Panel Admin</div>
+            <div class="admin-stats">
+                <span><i class="fas fa-users"></i> 18 siswa aktif</span>
+                <span style="margin-left: 20px;"><i class="fas fa-book-open"></i> 12 modul</span>
+            </div>
+            <div class="learning-grid">
+                <div class="lesson-card"><div class="lesson-icon"><i class="fas fa-edit"></i></div><h4>Tambah materi</h4><p>Upload PDF, video, tugas</p></div>
+                <div class="lesson-card"><div class="lesson-icon"><i class="fas fa-chart-line"></i></div><h4>Nilai siswa</h4><p>Rata-rata kuis: 82%</p></div>
+                <div class="lesson-card"><div class="lesson-icon"><i class="fas fa-users-cog"></i></div><h4>Kelola pengguna</h4><p>reset password / hapus</p></div>
+            </div>
+            <p style="color:#203a5c;"><i class="fas fa-info-circle"></i> Sebagai admin, Anda bisa menyunting seluruh konten bahasa Inggris.</p>
+        </div>
+
+        <!-- DASHBOARDS: Siswa (pembelajaran + kuis) -->
+        <div id="siswaDashboard" class="dashboard hidden">
+            <div class="section-title"><i class="fas fa-graduation-cap"></i> Belajar Bahasa Inggris</div>
+            <!-- materi pembelajaran -->
+            <div class="learning-grid">
+                <div class="lesson-card">
+                    <div class="lesson-icon"><i class="fas fa-clock"></i></div>
+                    <h4>Tenses</h4>
+                    <p>Present, Past, Future – penggunaan & contoh</p>
+                </div>
+                <div class="lesson-card">
+                    <div class="lesson-icon"><i class="fas fa-comments"></i></div>
+                    <h4>Conversation</h4>
+                    <p>Daily expressions, greeting, small talk</p>
+                </div>
+                <div class="lesson-card">
+                    <div class="lesson-icon"><i class="fas fa-pencil-alt"></i></div>
+                    <h4>Grammar</h4>
+                    <p>Adjective clauses, passive voice</p>
+                </div>
+                <div class="lesson-card">
+                    <div class="lesson-icon"><i class="fas fa-volume-up"></i></div>
+                    <h4>Pronunciation</h4>
+                    <p>Vowel sounds, stress pattern</p>
+                </div>
+            </div>
+
+            <!-- kuis interaktif sederhana -->
+            <div class="quiz-section">
+                <h3 style="margin-bottom: 16px;"><i class="fas fa-question-circle"></i> Kuis Hari Ini: Simple Present</h3>
+                <div class="quiz-question" id="quizBlock">
+                    <p style="font-size: 1.3rem; font-weight: 500;" id="questionText">She _____ to school every day.</p>
+                    <div class="options" id="optionsContainer">
+                        <div class="option-btn" data-index="0">go</div>
+                        <div class="option-btn" data-index="1">goes</div>
+                        <div class="option-btn" data-index="2">going</div>
+                        <div class="option-btn" data-index="3">gone</div>
+                    </div>
+                    <button class="btn btn-secondary" id="submitQuiz" style="padding: 12px 28px;">Kirim jawaban</button>
+                    <div id="quizFeedback" class="quiz-feedback"></div>
+                </div>
+                <!-- nilai atau pesan -->
+            </div>
+            <p style="margin-top: 20px; color: #1e3c60;"><i class="fas fa-laptop"></i> Pilih materi di atas untuk memulai, atau kerjakan kuis!</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        // State
+        let currentRole = null;          // 'admin' or 'siswa'
+        let selectedQuizOption = null;   // index 0-3
+
+        // DOM elements
+        const cardAdmin = document.getElementById('cardAdmin');
+        const cardSiswa = document.getElementById('cardSiswa');
+        const loginBtn = document.getElementById('loginBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const usernameInput = document.getElementById('usernameInput');
+        const passwordInput = document.getElementById('passwordInput');
+        const displayUserType = document.getElementById('displayUserType');
+
+        const adminDash = document.getElementById('adminDashboard');
+        const siswaDash = document.getElementById('siswaDashboard');
+
+        const optionBtns = document.querySelectorAll('.option-btn');
+        const submitQuiz = document.getElementById('submitQuiz');
+        const quizFeedback = document.getElementById('quizFeedback');
+        const questionText = document.getElementById('questionText'); // optional
+
+        // --- helper: update UI berdasarkan role & login state ---
+        function updateUI() {
+            // 1. reset active class pada card
+            cardAdmin.classList.remove('active');
+            cardSiswa.classList.remove('active');
+
+            if (currentRole) {
+                // highlight card sesuai role
+                if (currentRole === 'admin') cardAdmin.classList.add('active');
+                else if (currentRole === 'siswa') cardSiswa.classList.add('active');
+
+                // tampilkan dashboard
+                adminDash.classList.add('hidden');
+                siswaDash.classList.add('hidden');
+                if (currentRole === 'admin') adminDash.classList.remove('hidden');
+                else if (currentRole === 'siswa') siswaDash.classList.remove('hidden');
+
+                // session indicator
+                displayUserType.innerText = (currentRole === 'admin' ? 'Admin' : 'Siswa') + ' (login)';
+            } else {
+                // tidak login
+                adminDash.classList.add('hidden');
+                siswaDash.classList.add('hidden');
+                displayUserType.innerText = 'Belum login';
+            }
+
+            // reset pilihan kuis jika siswa dashboard disembunyikan atau role berubah
+            if (currentRole !== 'siswa') {
+                selectedQuizOption = null;
+                optionBtns.forEach(btn => btn.classList.remove('selected'));
+                if (quizFeedback) quizFeedback.innerHTML = '';
+            }
+        }
+
+        // --- login logic (sangat sederhana, hanya demo) ---
+        function attemptLogin() {
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+            const roleFromCard = 
+                cardAdmin.classList.contains('active') ? 'admin' :
+                cardSiswa.classList.contains('active') ? 'siswa' : null;
+
+            if (!roleFromCard) {
+                alert('Pilih tipe login (Admin atau Siswa) terlebih dahulu.');
+                return;
+            }
+
+            // demo credentials: 
+            // admin: admin / admin123   (bebas)
+            // siswa: siswa / siswa123   (atau apapun)
+            if (roleFromCard === 'admin') {
+                // untuk demo terima semua asal password mengandung "admin"
+                if (password.includes('admin')) {
+                    currentRole = 'admin';
+                    updateUI();
+                } else {
+                    alert('Password admin salah (contoh: admin123)');
+                }
+            } else if (roleFromCard === 'siswa') {
+                // siswa: terima jika password mengandung "siswa" atau kosong (untuk kemudahan)
+                if (password.includes('siswa') || password === '') {
+                    currentRole = 'siswa';
+                    updateUI();
+                } else {
+                    alert('Password siswa salah (contoh: siswa123)');
+                }
+            }
+        }
+
+        // logout
+        function logout() {
+            currentRole = null;
+            selectedQuizOption = null;
+            optionBtns.forEach(btn => btn.classList.remove('selected'));
+            if (quizFeedback) quizFeedback.innerHTML = '';
+            updateUI();
+            usernameInput.value = 'admin';   // reset default
+            passwordInput.value = 'admin123';
+        }
+
+        // --- event listeners ---
+        cardAdmin.addEventListener('click', () => {
+            cardAdmin.classList.add('active');
+            cardSiswa.classList.remove('active');
+        });
+        cardSiswa.addEventListener('click', () => {
+            cardSiswa.classList.add('active');
+            cardAdmin.classList.remove('active');
+        });
+
+        loginBtn.addEventListener('click', attemptLogin);
+        logoutBtn.addEventListener('click', logout);
+
+        // option click untuk kuis (hanya berfungsi jika siswa login)
+        optionBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                if (currentRole !== 'siswa') {
+                    alert('Silakan login sebagai siswa terlebih dahulu.');
+                    return;
+                }
+                // hapus selected dari semua
+                optionBtns.forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                // ambil index
+                selectedQuizOption = btn.getAttribute('data-index');
+            });
+        });
+
+        // submit kuis
+        if (submitQuiz) {
+            submitQuiz.addEventListener('click', () => {
+                if (currentRole !== 'siswa') {
+             # Lms.inggris
 Bhs inggris 
